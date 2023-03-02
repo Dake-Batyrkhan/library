@@ -1,0 +1,14 @@
+[
+    {
+        "id" : 1,
+        "genre" : "Historical" 
+    },
+    {
+        "id" : 2,
+        "genre" : "Realist Literature"
+    },
+    {
+        "id" : 3,
+        "genre" : "Drama"
+    }
+]
