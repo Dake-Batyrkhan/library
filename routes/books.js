@@ -42,7 +42,7 @@ router.post('/', (req, res) => {
     const postBody = req.body;
     allBooks.push(postBody);
     console.log(allBooks);
-    res.sendStatus(201);
+    res.send({ success: true });
 });
 
 router.put('/:id', (req, res) => {
@@ -55,7 +55,7 @@ router.put('/:id', (req, res) => {
     bookToUpd.authorId = authorId;
     bookToUpd.genreId = genreId;
     bookToUpd.rating = rating;
-    res.send(bookToUpd);
+    res.send({ success: true });
 });
 
 router.patch('/:id', (req, res) => {
@@ -68,7 +68,7 @@ router.patch('/:id', (req, res) => {
     if (authorId) bookToUpd.authorId = authorId;
     if (genreId) bookToUpd.genreId = genreId;
     if (rating) bookToUpd.rating = rating;
-    res.send(bookToUpd);
+    res.send({ success: true });
 
 });
 

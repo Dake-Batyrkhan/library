@@ -27,9 +27,31 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-    const postB = req.body;
-    allAuthors.push(postB);
-    console.log(allAuthors);
+    const postBody = req.body;
+    allAuthors.push(postBody);
+    console.log({ success: true });
 });
+
+router.put('/:id', (req,res) =>{
+    const { id } = req.params;
+    let putId = allAuthors.find((author) => author.id == id);
+    putId.fullname = fullname;
+    console.log({ success: true });
+});
+
+router.patch('/:id', (req,res) => {
+    const { id } = req.params;
+    let patchId = allAuthors.find((author) => author.id == id);
+    if(fullname) putId.fullname = fullname;
+    console.log({ success: true });
+});
+
+router.delete('/:id', (req,res) => {
+    const { id } = req.params;
+    let leftAuthors = allAuthors.filter((author) => author.id != id);
+    console.log({ success: true });
+});
+
+
 
 module.exports = router;
