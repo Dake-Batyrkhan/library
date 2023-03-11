@@ -1,33 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-let allBooks = [
-    {
-        "id": 1,
-        "title": "Abai joly 1",
-        "year": "1934",
-        "authorId": 1,
-        "genreId": 2,
-        "rating": 8
-    },
-    {
-        "id": 2,
-        "title": "Uwkan uia",
-        "year": "1954",
-        "authorId": 2,
-        "genreId": 2,
-        "rating": 6
-    },
-    {
-        "id": 3,
-        "title": "Alchemist",
-        "year": "1965",
-        "authorId": 3,
-        "genreId": 3,
-        "rating": 7
-    }
-
-]
+let allBooks = [];
 router.get('/', (req, res) => {
     res.send(allBooks);
 });
