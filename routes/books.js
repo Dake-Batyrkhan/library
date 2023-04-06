@@ -1,81 +1,70 @@
 const express = require('express');
 const router = express.Router();
+const Books = require('../models/books.js');
 
-let allBooks = [
-    {
-        "id": 1,
-        "title": "Abai joly 1",
-        "year": "1934",
-        "authorId": 1,
-        "genreId": 2,
-        "rating": 8
-    },
-    {
-        "id": 2,
-        "title": "Uwkan uia",
-        "year": "1954",
-        "authorId": 2,
-        "genreId": 2,
-        "rating": 6
-    },
-    {
-        "id": 3,
-        "title": "Alchemist",
-        "year": "1965",
-        "authorId": 3,
-        "genreId": 3,
-        "rating": 7
-    }
-
-]
 router.get('/', (req, res) => {
-    res.send(allBooks);
+    Books.find()
+    .then((result) => {
+        res.send(result);
+    })
+    .catch((err) => {
+        console.log(err);
+    });
 });
 
 router.get('/:id', (req, res) => {
     const { id } = req.params;
-    const bookWithId = allBooks.find((book) => book.id == id);
-    res.send(bookWithId);
+    Books.findById(id)
+    .then((result)=> {
+        res.send(result);
+    })
+    .catch((err) => {
+        console.log(err);
+    });
 });
 
 router.post('/', (req, res) => {
-    const postBody = req.body;
-    allBooks.push(postBody);
-    console.log(allBooks);
-    res.sendStatus(201);
+    const postBook = new Books(req.body);
+    postBook.save()
+    .then((result) => {
+        res.send(result);
+    })
+    .catch((err) => {
+        console.log(err);
+    });
 });
 
 router.put('/:id', (req, res) => {
     const { id } = req.params;
-    const { title, year, authorId, genreId, rating } = req.body;
-    let bookToUpd = allBooks.find((book) => book.id == id);
-
-    bookToUpd.title = title;
-    bookToUpd.year = year;
-    bookToUpd.authorId = authorId;
-    bookToUpd.genreId = genreId;
-    bookToUpd.rating = rating;
-    res.send(bookToUpd);
+    Books.findOneAndUpdate({_id : id}, req.body)
+    .then((result) => {
+        res.send(result);
+    })
+    .catch((err) => {
+        console.log(err);
+    });
 });
 
 router.patch('/:id', (req, res) => {
     const { id } = req.params;
-    const { title, year, authorId, genreId, rating } = req.body;
-    let bookToUpd = allBooks.find((book) => book.id == id);
-
-    if (title) bookToUpd.title = title;
-    if (year) bookToUpd.year = year;
-    if (authorId) bookToUpd.authorId = authorId;
-    if (genreId) bookToUpd.genreId = genreId;
-    if (rating) bookToUpd.rating = rating;
-    res.send(bookToUpd);
-
+    Books.findByIdAndUpdate(id, req.body)
+    .then((result) => {
+        res.send(result);
+    })
+    .catch((err) => {
+        console.log(err);
+    });
 });
 
 router.delete('/:id', (req, res) => {
     const { id } = req.params;
-    allBooks = allBooks.filter((book) => book.id != id);
-    res.send({ success: true });
+    Books.findByIdAndDelete(id)
+        .then((result) => {
+            res.send(result);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
 });
 
 module.exports = router;
