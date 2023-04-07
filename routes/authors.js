@@ -1,45 +1,76 @@
 const express = require('express');
 const router = express.Router();
+const Authors = require('../models/authors.js');
 
-let allAuthors = [];
-
-router.get('/', (req, res) => {
-    res.send(allAuthors);
+router.get('/', async (req, res) => {
+    const fullname = req.query.fullname;
+    if(fullname){
+        const authors = await Authors.find({fullname});
+        res.send(authors);
+    }
+    else { 
+        const authors = await Authors.find();
+        res.send(authors);
+    }
 });
 
 router.get('/:id', (req, res) => {
     const { id } = req.params;
-    const authorWithId = allAuthors.find((author) => author.id == id);
-    res.send(authorWithId);
+    Authors.findById(id)
+    .then((result) => {
+        res.send(result);
+    })
+    .catch((err) => {
+        console.log(err);
+    });
 });
 
 router.post('/', (req, res) => {
-    const postBody = req.body;
-    allAuthors.push(postBody);
-    res.send({ success: true });
+    const postAuthor = new Authors(req.body);
+    postAuthor.save()
+    .then((result) => {
+        res.send(result);
+    })
+    .catch((err) => {
+        console.log(err);
+    });
 });
+
 
 router.put('/:id', (req,res) =>{
     const { id } = req.params;
-    const { fullname } = req.body;
-    let putId = allAuthors.find((author) => author.id == id);
-    putId.fullname = fullname;
-    res.send({ success: true });
+    Authors.findOneAndUpdate({_id : id}, req.body, {new: true}, (err, result) => {
+        if (err) {
+            console.log(err);
+            res.status(500).send({error: 'Update failed.'});
+        } else {
+            res.send(result);
+        }
+    });
 });
+
 
 router.patch('/:id', (req,res) => {
     const { id } = req.params;
-    const {fullname} = req.body;
-    let patchId = allAuthors.find((author) => author.id == id);
-    if(fullname) patchId.fullname = fullname;
-    res.send({ success: true });
+    Authors.findByIdAndUpdate(id, req.body)
+    .then((result) => {
+        res.send(result);
+    })
+    .catch((err) => {
+        console.log(err);
+    });
 });
 
-router.delete('/:id', (req,res) => {
+router.delete('/:id', (req, res) => {
     const { id } = req.params;
-    let leftAuthors = allAuthors.filter((author) => author.id != id);
-    allAuthors = leftAuthors;
-    res.send(leftAuthors);
+    Authors.findByIdAndDelete(id)
+      .then(() => {
+        res.status(204).send();
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500).json({ message: 'Failed to delete author' });
+      });
 });
 
 
