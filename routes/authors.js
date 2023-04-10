@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Authors = require('../models/authors.js');
+const Books = require('../models/books.js')
 
 router.get('/', async (req, res) => {
     const fullname = req.query.fullname;
@@ -13,6 +14,23 @@ router.get('/', async (req, res) => {
         res.send(authors);
     }
 });
+
+router.get('/:id/books', async (req, res) => {
+    const authorId = req.params.id;
+    const author = await Authors.findById(authorId);
+
+    if (!author) {
+        return res.status(404).send('Author not found');
+    }
+
+    const authorBooks = await Books.find({authorId: authorId});
+
+    if(authorBooks.length === 0){
+        return res.status(404).send('No books found for this author');
+    }
+
+    res.send(authorBooks);
+})
 
 router.get('/:id', (req, res) => {
     const { id } = req.params;
