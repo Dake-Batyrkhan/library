@@ -17,20 +17,29 @@ router.get('/', async (req, res) => {
 
 router.get('/:id/books', async (req, res) => {
     const authorId = req.params.id;
-    const author = await Authors.findById(authorId);
+    const bookName = req.query.title;
 
-    if (!author) {
-        return res.status(404).send('Author not found');
+    if (bookName) {
+        const booksOfAuthor = await Books.find({authorId : authorId, title : bookName})
+        return res.send(booksOfAuthor);
     }
+    else{
+        const author = await Authors.findById(authorId);
 
-    const authorBooks = await Books.find({ authorId: authorId });
+        if (!author) {
+            return res.status(404).send('Author not found');
+        }
 
-    if (authorBooks.length === 0)
-    {
-        return res.status(404).send('No books found for this author');
+        const authorBooks = await Books.find({ authorId: authorId });
+
+        if (authorBooks.length === 0)
+        {
+            return res.status(404).send('No books found for this author');
+        }
+
+        res.send(authorBooks);
+        
     }
-
-    res.send(authorBooks);
 })
 
 router.get('/:id', (req, res) => {
