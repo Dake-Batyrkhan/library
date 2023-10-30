@@ -3,13 +3,13 @@ const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 dotenv.config();
 
-const config = require('./config');
+const config = require('./config.ts');
 const booksRoutes = require('./routes/books');
 const authorsRoutes = require('./routes/authors');
 const genreRoutes = require('./routes/genre');
 
 const app = express();
-const dbMongo = config.mongodbUrl;
+const dbMongo = process.env.MONGO_URL;
 const mongoose = require('mongoose');
 
 mongoose
@@ -30,6 +30,6 @@ app.get('/', (req, res) => {
   res.send('Hello from Homepage');
 });
 
-app.listen(config.port, () => {
-  console.log(`Server Started on localhost: ${config.port}`);
+app.listen(process.env.PORT, () => {
+  console.log(`Server Started on localhost: ${process.env.PORT}`);
 });

@@ -1,6 +1,4 @@
-const config: { port: number; mongodbUrl: string } = {
-  port: Number(process.env.PORT) ?? 3000,
-  mongodbUrl: process.env.MONGODB_URL ?? '',
+const config = {
+  port: 3000,
+  mongodbUrl: '',
 };
-
-export default config;
